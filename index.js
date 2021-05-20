@@ -93,7 +93,12 @@ const logger = (payload = {}) => {
     });
 
   const onResponseFinished = (ctx, info) => {
-    info.res = ctx.response;
+    // 处理body为字符串时 解析问题
+    const response = {
+      ...ctx.response,
+      body: JSON.parse((ctx.response.body))
+    }
+    info.res = response;
     info.duration = Date.now() - info.started_at;
 
     info.level = getLogLevel(info.res.status, defaultLevel);
