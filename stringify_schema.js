@@ -66,6 +66,7 @@ const defaultSchemas = {
     type: 'object',
     properties: {
       started_at: { type: 'integer' },
+      time: {type: 'string'},
       duration: { type: 'integer' },
       level: { type: 'string' },
       message: { type: 'string' },
@@ -110,8 +111,8 @@ const schemaKeysHandler = (keys, handler) => keys
   .map(handler);
 
 const schemaKeysHandlers = ({
-  keys, select, unselect, schema,
-}) => {
+                              keys, select, unselect, schema,
+                            }) => {
   const outputSchema = { type: 'object', properties: {} };
   schemaKeysHandler(keys.concat(select), (path) => {
     set(outputSchema, path, get(schema, path, {}));

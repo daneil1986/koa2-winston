@@ -32,6 +32,18 @@ const getLogLevel = (statusCode = 200, defaultLevel = C.INFO) => {
   }
 };
 
+function pad(n) {
+  return n < 10 ? '0' + n.toString(10) : n.toString(10);
+}
+
+function timestamp() {
+  var d = new Date();
+  var time = [pad(d.getHours()),
+    pad(d.getMinutes()),
+    pad(d.getSeconds())].join(':');
+  return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()} ${time}`;
+}
+
 /**
  * logger middleware for koa2 use winston
  *
@@ -94,10 +106,13 @@ const logger = (payload = {}) => {
 
   const onResponseFinished = (ctx, info) => {
     // 处理body为字符串时 解析问题
+    const { status, header } = ctx.response;
     const response = {
-      ...ctx.response,
+      status,
+      header,
       body: JSON.parse((ctx.response.body))
     }
+    console.log(response, ctx.response);
     info.res = response;
     info.duration = Date.now() - info.started_at;
 
@@ -107,7 +122,7 @@ const logger = (payload = {}) => {
   };
 
   return async (ctx, next) => {
-    const info = { req: ctx.request, started_at: Date.now() };
+    const info = { req: ctx.request, started_at: Date.now(), time: timestamp() };
     info.message = format(msg, info.req.method, info.req.url);
 
     let error;
