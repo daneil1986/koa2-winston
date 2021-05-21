@@ -65,8 +65,9 @@ const defaultSchemas = {
     },
     type: 'object',
     properties: {
-      started_at: { type: 'integer' },
+      logid: { type: 'integer' },
       time: {type: 'string'},
+      started_at: { type: 'integer' },
       duration: { type: 'integer' },
       level: { type: 'string' },
       message: { type: 'string' },

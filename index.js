@@ -112,7 +112,6 @@ const logger = (payload = {}) => {
       header,
       body: JSON.parse((ctx.response.body))
     }
-    console.log(response, ctx.response);
     info.res = response;
     info.duration = Date.now() - info.started_at;
 
@@ -122,7 +121,14 @@ const logger = (payload = {}) => {
   };
 
   return async (ctx, next) => {
-    const info = { req: ctx.request, started_at: Date.now(), time: timestamp() };
+    // 从上游获取logid
+    const logid = ctx.request.header['_logId'] || 0;
+    const info = {
+      logid,
+      req: ctx.request,
+      started_at: Date.now(),
+      time: timestamp(),
+    };
     info.message = format(msg, info.req.method, info.req.url);
 
     let error;
