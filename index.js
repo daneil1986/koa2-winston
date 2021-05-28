@@ -122,7 +122,7 @@ const logger = (payload = {}) => {
 
   return async (ctx, next) => {
     // 从上游获取logid
-    const logid = ctx.request.header['_logId'] || 0;
+    const logid = ctx.request.header['logid'] || 0;
     const info = {
       logid,
       req: ctx.request,
